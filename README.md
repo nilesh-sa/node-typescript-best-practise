@@ -51,7 +51,6 @@ To pass information of Different APIs, request parameters, response parameters, 
 
 * apiDoc based [demo](http://apidocjs.com/example/)
 * Swagger based [demo](http://editor.swagger.io/#/)
-* 
 
 ## Database authentication
 * Ensure Database is protected with secure username/password for any environment including your development environment.
