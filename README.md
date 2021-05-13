@@ -2,12 +2,13 @@
 ## _Solution Analysts NodeJS development best practices_
 
 ## Table of Contents
+ 1. [Environment](#environment)
  1. [Identifiers Naming style](#identifiers-naming-style)
- 2. [Environment](#environment)
- 3. [API Documentation](#api-document)
- 4. [Database authentication](#database-authentication)
- 5. [Lint configuration](#lint-configuration)
- 6. [Other Coding notes](#other-coding-notes)
+ 1. [API Documentation](#api-document)
+ 1. [Database authentication](#database-authentication)
+ 1. [Lint configuration](#lint-configuration)
+ 1. [Security Best Practices](#security-best-practices)
+ 1. [Other Coding notes](#other-coding-notes)
 
 ## Environment
 ### Environment specific configurations 
@@ -85,6 +86,54 @@ We can use [linter](https://www.npmjs.com/package/eslint) plugins like eslint-pl
 | no-empty | disallow empty block statements
 | no-empty-character-class | disallow empty character classes in regular expressions
 | no-ex-assign | disallow reassigning exceptions in ‘catch’ clauses
+
+## Security Best Practices
+We can implement the below security practices to keep the Node.js application safe from attacks. In this blog, we have ensured to cover all the top OWASP (Open Web Security Project) practices for all the Node js security vulnerabilities you come across. Please find security tips below for your web application.
+
+### Use Lint Plug-ins
+We can use linter plugins like eslint-plugin-security to identify security plugins and vulnerabilities when we implement codes in Node.js.
+
+### Prevent DOS Attacks by Using Middlewares
+In case when the legit users do not receive the desired service or in case they receive degraded services, here we can ensure that our node application is under the threat of a DOS attack.
+To prevent this situation from happening, we should implement rare limiting using middleware for apps. For larger apps, there are some plug-ins available like rate-limiter-flexible package, Nginx, cloud firewalls, cloud load balancer.
+
+### Prevent SQL Injections
+When you frequently use JS strings or string concatenations, this increases the risk of database manipulation. This practice makes your data invalidated, and the developed app highly vulnerable to SQL injection attacks.
+
+In-built security against certain SQL injection attacks is available for ORMs such as Sequelize and mongoose. The built-in indexed parameterized queries provided by Object-Relational Mapping/Object Document Mapper ORM/ODM or database libraries supporting indexed parameterized queries must always be used to avoid these attacks.
+
+```javascript
+    const drivers = await db.sequelize.query(
+      `SELECT * FROM "get_drivers"($id, $name)`,
+        bind:{
+         $id: id,
+         $name: name
+        }
+    );
+```
+    
+```javascript
+   My.findAll("psu_project", ["id"], "id=?", [id]).then(function (r) {
+    console.log(r)
+   })
+   ```
+
+
+### Secure Transmission of Data
+For our application data’s integrity and confidentiality in transit is very important. One of the major reasons that compromise the application security of our data and confidentiality are some encryption misconfiguration in the tested infrastructure.
+
+Protocols like TLS (Transport Layer Security) and SSL (Secure Sockets Layer), are used to establish an encrypted end-to-end connection between client and server (web server and a browser). SSL makes use of strong ciphers and secure algorithms, for client-server communication the same way TLS ensures sensitive data such as card details and user credentials be transmitted securely.
+
+### Manage HTTP Headers
+In order to prevent clickjacking, cross-site scripting (XSS attacks), and other malicious attacks, you can create impactful node js applications with secure HTTP headers. We can use plug-ins like the helmet which is easy to configure and create our own Node.js security rules.
+
+### Control Request Payload Size
+When the traffic on our application increases, it is difficult to process other important requests, which lowers app performance and exposes our application to Denial-Of-Service (DOS) attacks. A bigger request body is executed by a single thread.
+
+Because of the bigger payload size, attackers can implement vulnerabilities even without making multiple requests. We can limit the body size by using express body-parser that accepts only small-size payloads.
+
+### Hide Error Details from Clients
+In the node js application, We should use our own error handler that has the ability to handle server errors. While doing that, we must prevent the entire error information to the user because it might expose some of our application’s sensitive data like physical paths of files, connection string, sensitive code, etc.
 
 ## Other Coding notes
 
